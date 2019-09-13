@@ -19,9 +19,18 @@ parsing, code generation). The output will be an assembler file suitable for com
 # Tokenization
 This process scans the input document and transforms the text into an array of tokens annotated by the token type and value.
 This includes the following types:
-identifier – symbol that identifies a value (e.g. label, variable).
-keyword – a word reserved for use by the language (e.g. char, for, goto, if, short).
-literal – a value that can be directly interpreted (e.g. an integer, character).
-operator – low level ALU operations (e.g. +, -, <, >)
-separator - syntax characters (e.g , ; )
-string - a text literal delimited by quotes
+* identifier – symbol that identifies a value (e.g. label, variable).
+* keyword – a word reserved for use by the language (e.g. char, for, goto, if, short).
+* literal – a value that can be directly interpreted (e.g. an integer, character).
+* operator – low level ALU operations (e.g. +, -, <, >)
+* separator - syntax characters (e.g , ; )
+* string - a text literal delimited by quotes
+
+# Parsing
+This process is where the rubber meets the road. The token list is scanned and an abstract syntax tree is built. The root of
+the tree is the global name space which contains the static variables, and the program entry point called main.
+
+# Code Generation
+This process is controlled by a target command line option to produce code suitable for a specific target architecture. It 
+walks the AST and emits corresponding assembler constructs. Final object file generation is done via an assembler for the
+target platform.
