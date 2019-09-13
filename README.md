@@ -28,9 +28,11 @@ This includes the following types:
 
 # Parsing
 This process is where the rubber meets the road. The token list is scanned and an abstract syntax tree is built. The root of
-the tree is the global name space which contains the static variables, and the program entry point called main.
+the tree is the global name space which contains the static variables, and the program entry point called main. Nodes of the
+tree consist of type field and array of child nodes. For example an assignment node would have two children for the source
+and target.
 
 # Code Generation
-This process is controlled by a target command line option to produce code suitable for a specific target architecture. It 
-walks the AST and emits corresponding assembler constructs. Final object file generation is done via an assembler for the
-target platform.
+This process is controlled by a target command line option to produce code suitable for a specific target architecture. It
+depth first traverses the AST and emits corresponding assembler constructs. Final object file generation is done via an
+assembler for the target platform.
