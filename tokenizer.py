@@ -16,9 +16,9 @@ class Token:
 
     NAMES = ["UNKNOWN", "COMMENT", "IDENTIFIER", "KEYWORD", "LITERAL", "OPERATOR", "SEPARATOR", "STRING"]
 
-    def __init__(self):
-        self.type = Token.UNKNOWN
-        self.value = ""
+    def __init__(self, type = UNKNOWN, value = ''):
+        self.type = type
+        self.value = value
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -60,6 +60,7 @@ class Tokenizer:
             Token.LITERAL : self.processLiteral,
             Token.STRING : self.processString
         }
+        self.workToken = Token()
 
     def tokenizeFile(self, filename):
         """
@@ -99,7 +100,7 @@ class Tokenizer:
         """
         if line.startswith(self.comment):
             self.workToken.type = Token.COMMENT
-            rest = rest[1:]
+            rest = line[len(self.comment):]
         elif first.isalpha() or first == "_":
             self.workToken.type = Token.IDENTIFIER
             self.workToken.appendChar(first)
@@ -109,10 +110,11 @@ class Tokenizer:
         elif first in self.separators:
             self.appendToken(Token.SEPARATOR, first)
         elif first in self.operators:
-            # check for double operators (e.g. ++, --, ==, etc)
-            if rest.startswith(first):
+            # check for C style two character operators (e.g. ++, --, ==, etc)
+            if first + rest[:1] in self.operators:
+                first = first + rest[:1]
                 rest = rest[1:]
-            self.appendToken(Token.OPERATOR, first + first)
+            self.appendToken(Token.OPERATOR, first)
         elif first == "\"":
             self.workToken.type = Token.STRING
         return rest
